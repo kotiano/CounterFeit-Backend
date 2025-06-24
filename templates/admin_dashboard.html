@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alcohol Detection Admin Map</title>
+    <meta charset="utf-8" />
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        h2 {
+            padding: 1rem;
+            margin: 0;
+            background: #333;
+            color: white;
+        }
+        .error-message {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #ff4d4d;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+    <!-- Leaflet CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <h2>Alcohol Detection Map</h2>
+    <div id="map"></div>
+    <div id="error-message" class="error-message"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([-1.286389, 36.817223], 6); // Nairobi default center
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 18,
+        }).addTo(map);
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        fetch('/api/locations')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Failed to fetch locations');
+                }
+                return res.json();
+            })
+            .then(data => {
+                data.locations.forEach(loc => {
+                    const color = loc.is_authentic ? 'green' : 'red';
+                    const marker = L.circleMarker([loc.lat, loc.lng], {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.5,
+                        radius: 8
+                    }).addTo(map);
+
+                    marker.bindPopup(
+                        `<b>Brand:</b> ${loc.brand}<br>` +
+                        `<b>Batch:</b> ${loc.batch_no}<br>` +
+                        `<b>Date:</b> ${loc.date}<br>` +
+                        `<b>Confidence:</b> ${loc.confidence}<br>` +
+                        `<b>Status:</b> ${loc.is_authentic ? '✅ Authentic' : '❌ Counterfeit'}<br>` +
+                        `<img src="${loc.image_url}" alt="Scan" style="width:100px;height:auto;">`
+                    );
+                });
+            })
+            .catch(err => {
+                console.error('Map data load error:', err);
+                showError('Failed to load map data. Please try again later.');
+            });
+    </script>
+</body>
+</html>
