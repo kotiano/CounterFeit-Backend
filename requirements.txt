@@ -1,4 +1,10 @@
 fastapi
+python-dotenv
 python-jose
 tensorflow
 sqlalchemy
+uvicorn
+python-multipart
+passlib[bcrypt]
+jinja2
+
