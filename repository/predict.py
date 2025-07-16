@@ -24,7 +24,7 @@ KEEP_IMAGES = os.getenv("KEEP_IMAGES", "false").lower() == "true"
 LATENT_DIM = int(os.getenv("LATENT_DIM", 256))
 SIGMA = float(os.getenv("SIGMA", 0.0003))
 TARGET_SIZE = tuple(map(int, os.getenv("TARGET_SIZE", "224,224").split(",")))
-AUTHENTICITY_THRESHOLD = float(os.getenv("AUTHENTICITY_THRESHOLD", 0.4))
+AUTHENTICITY_THRESHOLD = float(os.getenv("AUTHENTICITY_THRESHOLD", 0.5))
 MODEL_PATH = os.getenv("MODEL_PATH")
 
 logger = setup_logging(__name__)
