@@ -1,16 +1,17 @@
+from sqlalchemy import Column, Integer, Float, String, Boolean, DateTime
 from database import Base
-from sqlalchemy import Column, Integer, Boolean, String, Float, Date, DateTime
 from datetime import datetime
 
-class ScanResult(Base):
-    __tablename__ = 'scan_results'
-    id = Column(Integer, primary_key=True)
-    brand = Column(String(80), nullable=False)
-    batch_no = Column(String(80), nullable=False, unique=True)
-    date = Column(Date, nullable=False)
-    confidence = Column(Float, nullable=False)
-    is_authentic = Column(Boolean, nullable=False)
-    latitude = Column(Float, nullable=True)
-    longitude = Column(Float, nullable=True)
-    image_url = Column(String(200), nullable=True)
-    timestamp = Column(DateTime, default=datetime.utcnow, index=True)
+class Scan(Base):
+    __tablename__ = "scans"
+    id = Column(Integer, primary_key=True, index=True)
+    is_counterfeit = Column(Boolean)
+    confidence = Column(Float)
+    message = Column(String)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    brand = Column(String)
+    date = Column(DateTime, default=datetime.utcnow)
+
+class ScanResult:
+    pass

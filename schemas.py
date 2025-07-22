@@ -1,5 +1,6 @@
 from pydantic import BaseModel, field_validator
 from typing import Optional
+from datetime import datetime
 
 class AdminLogin(BaseModel):
     username: str
@@ -50,3 +51,15 @@ class LocationResponse(BaseModel):
 
 class LocationsResponse(BaseModel):
     locations: list[LocationResponse]
+
+class ScanCreate(BaseModel):
+    is_counterfeit: bool
+    confidence: float
+    message: str
+    latitude: float
+    longitude: float
+    brand: Optional[str] = None
+    date: Optional[datetime] = None
+
+class ScanOut(ScanCreate):
+    id: int
