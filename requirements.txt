@@ -7,5 +7,4 @@ uvicorn
 python-multipart
 passlib[bcrypt]
 jinja2
-pillow
 
